@@ -10,10 +10,10 @@ class MiTcpHandler(SocketServer.BaseRequestHandler):
 	# Sobreescribimos el metodo handle
 	def handle(self):
 		self.data = self.request.recv(1024).strip()
-		if self.data == 'top_urls' or self.data ==  'top_urls_back' or self.data == 'top_status':
+		if self.data == 'top_urls' or self.data ==  'top_urls_back' or self.data == 'top_status' or self.data == 'varnishstat' or self.data == 'hits' or self.data == 'request' or self.data == 'miss':
 			datos = execute(self.data)
 			for line in datos:
-				self.request.send(line)
+				self.request.send(line + "<br/>")
 		else:
 			self.request.send("Command not found!!")		
 		time.sleep(0.1)
@@ -55,7 +55,54 @@ def execute(check):
                         )
 
                 command = head.stdout
-	
+	if check == 'varnishstat':
+                varnishstat = subprocess.Popen(['/usr/bin/varnishstat', '-1'],
+                        stdout=subprocess.PIPE,
+                        )
+                command = varnishstat.stdout
+
+        if check == 'hits':
+                varnishtop = subprocess.Popen(['/usr/bin/varnishstat', '-1'],
+                        stdout=subprocess.PIPE,
+                        )
+                grep = subprocess.Popen(['grep', 'cache_hit'],
+                        stdin=varnishtop.stdout,
+                        stdout=subprocess.PIPE,
+                        )
+                head = subprocess.Popen(['head', '-1'],
+                        stdin=grep.stdout,
+                        stdout=subprocess.PIPE,
+                        )
+                command = head.stdout
+
+        if check == 'miss':
+                varnishtop = subprocess.Popen(['/usr/bin/varnishstat', '-1'],
+                        stdout=subprocess.PIPE,
+                        )
+                grep = subprocess.Popen(['grep', 'cache_miss'],
+                        stdin=varnishtop.stdout,
+                        stdout=subprocess.PIPE,
+                        )
+                head = subprocess.Popen(['head', '-1'],
+                        stdin=grep.stdout,
+                        stdout=subprocess.PIPE,
+                        )
+                command = head.stdout
+
+        if check == 'request':
+                varnishtop = subprocess.Popen(['/usr/bin/varnishstat', '-1'],
+                        stdout=subprocess.PIPE,
+                        )
+                grep = subprocess.Popen(['grep', 'client_req'],
+                        stdin=varnishtop.stdout,
+                        stdout=subprocess.PIPE,
+                        )
+                head = subprocess.Popen(['head', '-1'],
+                        stdin=grep.stdout,
+                        stdout=subprocess.PIPE,
+                        )
+                command = head.stdout
+
 	return command
 
 
