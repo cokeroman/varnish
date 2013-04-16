@@ -1,6 +1,5 @@
 - Modulos PHP a instalar:
     extension=sockets.so
-    extension=varnish.so (Para compilar este modulo hay que instalar al menos la librerias de desarrollo del varnish 3)
     extension=snmp.so
 
 - En el directorio bin estan varnishagent.py y varnishagent.initd. El varnishagent.py hay que copiarlo en todas y cada una de las caches. El varnishagent.initd es el script de arranque (debian).
@@ -13,7 +12,6 @@
 
     # Puerto del varnishagent y varnishadmin
     $config['varnishagent_port'] = 9999;
-    $config['varnishadmin_port'] = 6082;
     $config['varnish_secret'] = "44cc4ad9-ba4c-492e-90f1-c54545454545dsfdf"; (Contenido del fichero /etc/varnish/secret)
 
 
