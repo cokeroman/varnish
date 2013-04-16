@@ -1,0 +1,29 @@
+#!/bin/bash
+
+WORKDIR="/opt/varnishagent/bin"
+DAEMON="varnishagent.py"
+USER="nobody"
+
+case "$1" in
+        start)
+                echo -n "Arrancando $DAEMON........................."
+                ${WORKDIR}/${DAEMON} &
+                if [[ $? -eq 0 ]]
+                then
+                        echo "OK"
+                else
+                        echo "KO"
+                fi
+        ;;
+
+        stop)
+                PID=`ps -C $DAEMON | grep -v PID | awk '{print $1}'`
+
+                echo "Parando $DAEMON"
+                kill -9 $PID
+        ;;
+
+        *)
+        echo "$0 (start|stop)"
+        ;;
+esac

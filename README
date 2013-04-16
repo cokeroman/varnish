@@ -1,0 +1,29 @@
+- Modulos PHP a instalar:
+    extension=sockets.so
+    extension=varnish.so (Para compilar este modulo hay que instalar al menos la librerias de desarrollo del varnish 3)
+    extension=snmp.so
+
+- En el directorio bin estan varnishagent.py y varnishagent.initd. El varnishagent.py hay que copiarlo en todas y cada una de las caches. El varnishagent.initd es el script de arranque (debian).
+- Para configurar la app hay que tocar el fichero application/config/config.php las siguentes variables:
+    # Array con las caches existentes:
+    $config['hosts'] = array("gcache1", "gcache2", "gcache3", "gcache4");
+
+    # SNMP Community
+    $config['snmp_community'] = "t5cloud";
+
+    # Puerto del varnishagent y varnishadmin
+    $config['varnishagent_port'] = 9999;
+    $config['varnishadmin_port'] = 6082;
+    $config['varnish_secret'] = "44cc4ad9-ba4c-492e-90f1-c54545454545dsfdf"; (Contenido del fichero /etc/varnish/secret)
+
+
+- Para que funcione el invalidado hay que permitir en el default.vcl 
+    - En vcl_recv:
+    if (req.request == "BAN") {
+          ban("obj.http.x-url ~ " + req.http.x-ban-url + " && obj.http.x-host ~ " + req.http.x-ban-host);
+          error 200 "Banned";
+    }
+    if (req.request != "PURGE") {
+        error 405 "Method Not Allowed";
+    }
+

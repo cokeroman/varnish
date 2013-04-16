@@ -1,0 +1,5 @@
+- varnishagent.initd:
+    - Es el script de arranque que hay que colocar en el /etc/init.d de la máquina.
+
+- varnishagent.py
+    - Es el script en python que hay hay que ubicar en /opt/varnishagent
