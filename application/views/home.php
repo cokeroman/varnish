@@ -47,7 +47,7 @@
                                                     <?php 
                                                         foreach ($hosts as $host) {
                                                             echo "<tr>";
-                                                            echo "  <td>$host</td>";
+                                                            echo "  <td><a href='/report/status/$host' target='_blank'>$host</a></td>";
                                                             echo "  <td><div align='center' id='request_$host'><img height='42' width='42' src='/img/loading_100x100.gif'></div></td>";
                                                             echo "  <td><div align='center' id='load_$host'><img height='42' width='42' src='/img/loading_100x100.gif'></div></td>";
                                                             echo "  <td><div align='center' id='status_$host'><img height='42' width='42' src='/img/loading_100x100.gif'></div></td>";
