@@ -33,7 +33,7 @@
 						<ul class="dropdown-menu">
                                                     <?php
                                                         foreach ($hosts as $host) {
-                                                            	echo "<li><a href='/report/status/$host' target="_blank">$host</a></li>";
+                                                            	echo "<li><a href='/report/status/$host' target='_blank'>$host</a></li>";
                                                         }
                                                     ?>
 						</ul> 				
